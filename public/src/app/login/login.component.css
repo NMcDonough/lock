@@ -5,3 +5,19 @@ form{
   display: flex;
   flex-direction: column;
 }
+
+.container {
+  display: flex;
+}
+
+.red {
+  color: red;
+}
+
+.grn {
+  color: green;
+}
+
+.msg {
+  font-size: 10px;
+}
