@@ -12,4 +12,9 @@ export class ApiService {
     console.log('service sending data...');
     return this._http.post('http://localhost:8000/api/register', user);
   }
+
+  login(user) {
+    console.log('service is logging in...');
+    return this._http.post('http://localhost:8000/api/login', user);
+  }
 }

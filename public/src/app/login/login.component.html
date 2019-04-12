@@ -1,9 +1,15 @@
 <div class="container">
-    <form (submit)="submit()">
+    <form (submit)="register()">
         username <input type="text" [(ngModel)]="newUser.username" required minlength=3 #username="ngModel" name="newUser.username" id="newUser.username">
         email <input type="email" required [(ngModel)]="newUser.userName" name="newUser.email" id="newUser.email" #userName="ngModel">
         password <input type="password" required minlength="8" name="newUser.password" id="newUser.password" [(ngModel)]="newUser.password" #password="ngModel">
         confirm password <input type="password" required minlength="8" name="newUser.confirm" id="newUser.confirm" #confirm="ngModel" [(ngModel)]="newUser.confirm"><br>
-        <button class='btn'>Submit</button>
+        <button class='btn'>Register</button>
+    </form>
+
+    <form (submit)="login()">
+        email <input type="email" [(ngModel)]="user.username" required minlength=3 #username="ngModel" name="user.username" id="user.username">
+        password <input type="password" required minlength="8" name="user.password" id="user.password" [(ngModel)]="user.password" #password="ngModel">
+        <button class='btn'>Log in</button>
     </form>
 </div>
