@@ -8,7 +8,10 @@
       </li>
       <li>
         <a *ngIf="!loggedIn" class="nav-link" [routerLink]="['/login']">Login/Register</a>
-        <a *ngIf="loggedIn" class="nav-link" [routerLink]="['/user/{user.userame}']">You are logged in</a>
+        <a *ngIf="loggedIn" class="nav-link" [routerLink]="['/profile', this.getUserName()]">{{this.getUserName()}}</a>
+      </li>
+      <li *ngIf="loggedIn">
+        <a class="nav-link" (click)="logout()" href="#">Log out</a>
       </li>
     </ul>
   </nav>

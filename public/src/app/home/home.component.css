@@ -3,3 +3,23 @@
   width: 100%;
   justify-content: space-evenly;
 }
+
+.gameNail {
+    width: 200px;
+    height: 100px;
+ }
+
+ul, li {
+  display: flex;
+  justify-content: space-around;
+}
+
+ .gameBox {
+   margin: 25px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   max-width: 35%;
+   max-height: 250px;
+ }

@@ -1,20 +1,16 @@
 
 <div class="homeWrapper">
-  <div class="content-left">
-
-    <h1>This is where I'd put my games</h1>
-    <img src="assets/images/any.jpg" alt="ifihadany.jpg">
-
-  </div>
-  <div class="content-right">
-
-    <ul>
-      <li>
-        <a [routerLink]="['/phaser-game']">Phaser Game</a>
-      </li>
-      <li>Game 2</li>
-      <li>Game 3</li>
-    </ul>
-
-  </div>
+  <ul class="games" style="list-style-type: none">
+    <li style="list-style-type: none">
+      <div class="gameBox">
+          <h1>Phaser Game</h1>
+          <a [routerLink]="['/phaser-game']">
+            <img src="cover.png" class="img-thumbnail" class="gameNail">
+          </a>
+          <p>My first ever game. I used 
+            <a href="https://phaser.io/tutorials/making-your-first-phaser-3-game/part1" target="_blank">this tutorial</a> 
+            to build the game, added a few custom mechanics and integrated high score tracking.</p>
+      </div>
+    </li>
+  </ul>
 </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ export class LoginComponent implements OnInit {
   regMessage: any;
   logMessage: any;
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService, private router: Router) { }
 
   ngOnInit() {
     this.newUser = {
@@ -26,16 +27,33 @@ export class LoginComponent implements OnInit {
       email: '',
       password: ''
     }
+    this.regMessage = {
+      type: '',
+      msg: ''
+    }
+    this.logMessage = {
+      type: '',
+      msg: ''
+    }
   }
 
   register() {
     console.log('submitted data:\n'  + this.newUser);
     this.api.registerUser(this.newUser)
     .subscribe(res => {
-      if(res['err']){
-        this.regMessage = res['err'];
+      console.log("server response received")
+      if(res['error']) {
+        this.regMessage.msg = res['message'];
+        this.regMessage.type = 'red';
       } else {
-        this.regMessage = res['message'];
+        this.regMessage.msg = res['message'];
+        this.regMessage.type = 'grn';
+        this.newUser = {
+          email: '',
+          username: '',
+          password: '',
+          confirm: ''
+        }
       }
     });
   }
@@ -44,13 +62,16 @@ export class LoginComponent implements OnInit {
     console.log('submitting login info:\n' + this.user);
     this.api.login(this.user)
     .subscribe(res => {
-      console.log('server response received:');
-      console.log(res['message']);
-      if(res['err']){
-        this.logMessage = res['err'];
+      console.log('server response received');
+      if(res['error']) {
+        this.logMessage.msg = res['message'];
+        this.logMessage.type = 'red';
       } else {
-        this.logMessage = res['message'];
+        sessionStorage.setItem('user', res['user']);
+        console.log("User id stored in session. Telling API to save user data")
+        this.api.setUser();
+        this.router.navigateByUrl('/');
       }
-    })
+    });
   }
 }

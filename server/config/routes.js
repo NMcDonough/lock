@@ -15,8 +15,12 @@ module.exports = function(app) {
       return controller.register(req,res);
     })
 
-    app.get('/api/loggedin', (req,res,next) => {
-      return controller.getLogged(req,res);
+    app.get('/api/user/:id', (req,res) => {
+      return controller.getUser(req,res);
+    })
+
+    app.delete('/api/delete/user/:id', (req,res) => {
+      return controller.deleteUser(req,res);
     })
 
     // app.all("*", (req,res,next) => {

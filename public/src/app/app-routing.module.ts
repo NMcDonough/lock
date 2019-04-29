@@ -1,3 +1,4 @@
+import { ProfileComponent } from './profile/profile.component';
 import { LoginComponent } from './login/login.component';
 import { PhaserGameComponent } from './phaser-game/phaser-game.component';
 import { NgModule } from '@angular/core';
@@ -21,6 +22,10 @@ const routes: Routes = [
     {
       path: 'login',
       component: LoginComponent
+    },
+    {
+      path: 'profile/:id',
+      component: ProfileComponent
     }
 ];
 

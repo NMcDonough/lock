@@ -1,3 +1,19 @@
-<p>
-  profile works!
-</p>
+<div class="profileWrapper">
+  <div class="content">
+    <h1>{{user.username}}</h1>
+    <h3>User since {{getDate()}}</h3>
+    <h3>Version {{user.version}}</h3>
+    <h3>High Scores:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th *ngFor="let key of getHighscores()">
+            {{user.highscores[key].name}}
+          </th>
+        </tr>
+      </thead>
+      <br>
+      <a href="javascript:void(0);" onclick="return false;" (click)="deleteAccount()">Delete my fuckin account bro - CANNOT BE UNDONE</a>
+    </table>
+  </div>
+</div>
