@@ -16,7 +16,6 @@ import './assets/PhaserGame/star.png';
 })
 export class PhaserGameComponent implements OnInit, OnDestroy {
   user: any;
-  highscore: Number;
   gameOver;
 
   constructor(private api: ApiService, private scoreServ: ScoreService) {}
@@ -28,11 +27,11 @@ export class PhaserGameComponent implements OnInit, OnDestroy {
     .subscribe(res => {
       console.log("Api sent this\n", res);
       res['highscores']['phaserGame']['score'] ? (
-        this.highscore = res['highscores']['phaserGame']['score'],
+        sessionStorage.highscore = res['highscores']['phaserGame']['score'],
         console.log("setting this.highscore to " + res['highscores']['phaserGame']['score'])
       ) : (
         console.log("Setting this.highscore to 0"),
-        this.highscore = 0
+        sessionStorage.highscore = 0
         )
       this.user = res;
     }) : null
@@ -52,11 +51,13 @@ export class PhaserGameComponent implements OnInit, OnDestroy {
 
   updateHighscore() {
     console.log("score:", score);
-    score > highscore ?
+    score > sessionStorage.highscore ?
     this.scoreServ.updateHighscore({score: score, game: 'phaserGame', user: sessionStorage.user})
     .subscribe(res => {
       console.log("Received response from server:")
       console.log(res['message']);
+      sessionStorage.highscore = score;
+      this.api.changeUser(res['user']);
     }) : null
   }
 }
@@ -139,7 +140,7 @@ function create() {
 
   healthText = this.add.text(600, 16, "Health: " + player.health, {fontSize:'25px', fill:'#000'});
 
-  highscoreText = this.add.text(200, 16, "Highscore: " + this.highscore, {fontSize: '25px', fill: '#000'});
+  highscoreText = this.add.text(200, 16, "Highscore: " + sessionStorage.highscore, {fontSize: '25px', fill: '#000'});
 
   bombs = this.physics.add.group();
   this.physics.add.collider(bombs, platforms);

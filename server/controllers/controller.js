@@ -22,13 +22,14 @@ module.exports = {
                 res.json({error: "Username is taken", error: "Username is taken"});
             }
         });
-        console.log("Username is valid")
-        console.log(user)
+        console.log("Username is valid");
+
         if(user.password == req.body.confirm){
             bcrypt.hash(user.password, 10, (err, hash) => {
-                if(err)
+                if(err) {
+                    console.log("Error:", err);
                     return res.json({error: err, message: "Registration error"});
-                else{
+                } else {
                     user.password = hash;
                     
                     user.save((err) => {
@@ -56,6 +57,7 @@ module.exports = {
                 return res.json({message: "Login error", error: err});
             } else {
                 if(user){
+                    console.log("user found")
                     bcrypt.compare(req.body.password, user.password, (err, result) => {
                         if(result) {
                             if (!result.version || result.version !== new User.version){
@@ -102,18 +104,26 @@ module.exports = {
     },
 
     updateScore: (req, res) => {
-        console.log(req.body)
-        User.findById({_id:req.body.user}, (err, user) => {
+        console.log("Received this data",req.body);
+        User.findOne({_id: req.body.user}, (err,user) => {
             if(err) {
-                return res.json({message: "An error occurred", error: err})
-            } else if(user){
-                    user.highscores[req.body.game]['score'] = req.body.score;
-                    console.log("Saving the following data")
-                    console.log(user)
-                    user.save();
-                    return res.json({message: "Score updated successfully"})
-            } else {
-                return res.json({message: "Something went wrong :/"});
+                return res.json({error: err, message: "Error retrieving user"});
+            } else if(user) {
+                console.log("Found user:", user.username);
+                user.highscores[req.body.game] = req.body.score;
+                console.log("User data:", user);
+                user.save((err, user) => {
+                    if(err) {
+                        return res.json({error: err, message: "Error saving user data"})
+                    } else if (user) {
+                        console.log("Saving successful. Mongoose returned:", user);
+                        user.password = null;
+                        return res.json({message: "Successful save", user: user});
+                    } else {
+                        console.log("None of the correct methods fired under /updateScore")
+                        return res.json({message: "Critical error"})
+                    }
+                });
             }
         })
     }
