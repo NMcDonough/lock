@@ -1,0 +1,6 @@
+#aboutContainer {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  padding: 5% 20% 0 20%;
+}
