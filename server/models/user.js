@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+var Score = require( './score.js');
+const mongoose = require('mongoose');
 
 var User = mongoose.model("user", new mongoose.Schema({
     username: {
@@ -22,14 +23,14 @@ var User = mongoose.model("user", new mongoose.Schema({
     version: {
         type: String,
         required: true,
-        default: "1.0.2"
+        default: "1.0"
     },
     highscores: {
         type: Object,
-        default: {
+        default:{
             phaserGame: {
                 name: "Phaser Game",
-                score: null
+                score: 0
             }
         }
     }

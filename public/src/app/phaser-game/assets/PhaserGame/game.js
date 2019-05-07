@@ -1,67 +1,9 @@
-import { BehaviorSubject } from 'rxjs';
-import { ApiService } from './../api.service';
-import { ScoreService } from './../score.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Physics } from 'phaser';
-import './assets/PhaserGame/sky.png';
-import './assets/PhaserGame/dude.png';
-import './assets/PhaserGame/bomb.png';
-import './assets/PhaserGame/platform.png';
-import './assets/PhaserGame/star.png';
+import './sky.png';
+import './dude.png';
+import './bomb.png';
+import './platform.png';
+import './star.png';
 
-@Component({
-  selector: 'app-phaser-game',
-  templateUrl: './phaser-game.component.html',
-  styleUrls: ['./phaser-game.component.css']
-})
-export class PhaserGameComponent implements OnInit, OnDestroy {
-  user: any;
-  highscore: Number;
-  gameOver;
-
-  constructor(private api: ApiService, private scoreServ: ScoreService) {}
-
-  ngOnInit() {
-    game = new Phaser.Game(config);
-    console.log("Component loaded");
-    sessionStorage.user ? this.api.getUser()
-    .subscribe(res => {
-      console.log("Api sent this\n", res);
-      res['highscores']['phaserGame']['score'] ? (
-        this.highscore = res['highscores']['phaserGame']['score'],
-        console.log("setting this.highscore to " + res['highscores']['phaserGame']['score'])
-      ) : (
-        console.log("Setting this.highscore to 0"),
-        this.highscore = 0
-        )
-      this.user = res;
-    }) : null
-
-    this.gameOver = gameOver
-    .asObservable()
-    .subscribe(res => {
-      res == true ? this.updateHighscore() : null;
-    })
-  }
-
-  ngOnDestroy(): void {
-    console.log("component being destroyed");
-    game.destroy();
-    moveSpeed = 200;
-  }
-
-  updateHighscore() {
-    console.log("score:", score);
-    score > highscore ?
-    this.scoreServ.updateHighscore({score: score, game: 'phaserGame', user: sessionStorage.user})
-    .subscribe(res => {
-      console.log("Received response from server:")
-      console.log(res['message']);
-    }) : null
-  }
-}
-
-var game;
 var platforms;
 var player;
 var cursors;
@@ -71,16 +13,17 @@ var scoreText;
 var bombs;
 var healthText;
 var reset;
-var gameOver = new BehaviorSubject(false);
+var gameOver = false;
 var poisonTint = 0x00ff00;
 var hitInterval;
 var moveSpeed = 200;
 var poisonInterval = 250;
 var WIDTH = 1366;
 var HEIGHT = 600;
+var highscore;
 var highscoreText;
 
-var config = {
+export var config = {
   type: Phaser.AUTO,
   parent: 'game-canvas',
   width: WIDTH,
@@ -119,7 +62,7 @@ function create() {
   .on('pointerdown', () => {
       this.scene.restart();
       this.physics.resume();
-      gameOver.next(false);
+      gameOver = false;
   });
 
   platforms = this.physics.add.staticGroup();
@@ -137,9 +80,10 @@ function create() {
   score = 0;
   scoreText = this.add.text(15, 16, 'Score: ' + score, {fontSize:'25px', fill:'#000'});
 
-  healthText = this.add.text(600, 16, "Health: " + player.health, {fontSize:'25px', fill:'#000'});
+  highscore = this.user != undefined ? this.user.highscore.phaserGame.score : 0;
+  highscoreText = this.add.text(200, 16, "Highscore: " + highscore, {fontSize: '25px', fill: '#000'});
 
-  highscoreText = this.add.text(200, 16, "Highscore: " + this.highscore, {fontSize: '25px', fill: '#000'});
+  healthText = this.add.text(600, 16, "Health: " + player.health, {fontSize:'25px', fill:'#000'});
 
   bombs = this.physics.add.group();
   this.physics.add.collider(bombs, platforms);
@@ -191,10 +135,11 @@ function create() {
     this.physics.pause();
     player.anims.play('turn');
     healthText.setText("Game Over")
-    gameOver.getValue() == true ? null : gameOver.next(true);
+    gameOver = true;
   }
 
-  if(gameOver.getValue() == true) {
+  if(gameOver) {
+    gameOverResponse();
     return;
   }
 

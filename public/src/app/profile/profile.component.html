@@ -4,16 +4,21 @@
     <h3>User since {{getDate()}}</h3>
     <h3>Version {{user.version}}</h3>
     <h3>High Scores:</h3>
-    <table>
+    <table *ngIf="highscores[0]">
       <thead>
         <tr>
           <th *ngFor="let key of getHighscores()">
-            {{user.highscores[key].name}}
+            <p>
+                {{user.highscores.scores[key].name}}
+            </p>
           </th>
         </tr>
       </thead>
       <br>
-      <a href="javascript:void(0);" onclick="return false;" (click)="deleteAccount()">Delete my fuckin account bro - CANNOT BE UNDONE</a>
     </table>
+    <div *ngIf="!highscores[0]">
+      <p>User has no high scores</p>
+    </div>
+    <a href="javascript:void(0);" onclick="return false;" (click)="deleteAccount()">Delete my fuckin account bro - CANNOT BE UNDONE</a>
   </div>
 </div>

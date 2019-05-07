@@ -23,6 +23,11 @@ module.exports = function(app) {
       return controller.deleteUser(req,res);
     })
 
+    app.post('/api/updateScore', (req,res) => {
+      console.log("Route hit")
+      return controller.updateScore(req, res);
+    })
+
     // app.all("*", (req,res,next) => {
     //     res.sendFile(path.resolve('./public/src/index.html'))
     // })

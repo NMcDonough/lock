@@ -5,7 +5,6 @@ var User = mongoose.model('user');
 
 module.exports = {
     register:(req, res) => {
-        console.log("DEBUG: /register hit. Data received:\n" + req.body)
         user = new User(req.body);
         User.findOne({email: user.email}, (err,user) => {
             console.log("Mongo queried. Response:\n" + err + "\nData found:\n" + user);
@@ -50,7 +49,6 @@ module.exports = {
 
     login: (req,res) => {
         console.log("login method hit");
-        console.log(req.body)
         User.findOne({email: req.body.email}, (err, user) => {
             if(err) {
                 console.log("ERROR: ")
@@ -90,7 +88,9 @@ module.exports = {
     },
 
     deleteUser: (req,res) => {
-        User.findOne({_id: req.params.id}, (err, user) => {
+        console.log("Searching for:", req.params.id)
+        User.findOne({_id: req.params.id}).remove().exec((err, user) => {
+            console.log("Found", user);
             if(err) {
                 return res.json({error: err, message: "There was an error!"})
             } else if(user) {
@@ -99,5 +99,22 @@ module.exports = {
             }
         })
         return res.json({message: "i been had got pinged dude"})
+    },
+
+    updateScore: (req, res) => {
+        console.log(req.body)
+        User.findById({_id:req.body.user}, (err, user) => {
+            if(err) {
+                return res.json({message: "An error occurred", error: err})
+            } else if(user){
+                    user.highscores[req.body.game]['score'] = req.body.score;
+                    console.log("Saving the following data")
+                    console.log(user)
+                    user.save();
+                    return res.json({message: "Score updated successfully"})
+            } else {
+                return res.json({message: "Something went wrong :/"});
+            }
+        })
     }
 }

@@ -1,7 +1,8 @@
 import { ApiService } from './../api.service';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { cast } from '../../assets/helpers.js';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-profile',
@@ -12,9 +13,9 @@ export class ProfileComponent implements OnInit {
 
   user:any;
   date: any;
-  objectKeys: any;
+  highscores = [];
 
-  constructor(private api: ApiService, private route: ActivatedRoute) { }
+  constructor(private api: ApiService, private router: Router) { }
 
   ngOnInit() {
     this.api.getUser().subscribe(res => {
@@ -23,11 +24,12 @@ export class ProfileComponent implements OnInit {
         this.api.setUser(),
         this.user = this.api.getUser().subscribe(res => {
           this.user = res;
+          _.map(Object.keys(res['highscores']), score => {
+            this.highscores.push(score);
+          })
         })
       ) : this.user = res;
     });
-
-    this.objectKeys = Object.keys;
   }
 
   getDate(){
@@ -35,6 +37,7 @@ export class ProfileComponent implements OnInit {
   }
 
   getHighscores() {
+    console.log("High scores", this.user.highscores);
     return Object.keys(this.user.highscores);
   }
 
@@ -44,6 +47,7 @@ export class ProfileComponent implements OnInit {
     .subscribe(res => {
       console.log("Response received from server:")
       console.log(res);
+      this.router.navigateByUrl('/');
     });
   }
 }
