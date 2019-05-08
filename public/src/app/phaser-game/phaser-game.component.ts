@@ -8,6 +8,7 @@ import './assets/PhaserGame/dude.png';
 import './assets/PhaserGame/bomb.png';
 import './assets/PhaserGame/platform.png';
 import './assets/PhaserGame/star.png';
+import './assets/PhaserGame/arrows.png';
 
 @Component({
   selector: 'app-phaser-game',
@@ -26,21 +27,28 @@ export class PhaserGameComponent implements OnInit, OnDestroy {
     sessionStorage.user ? this.api.getUser()
     .subscribe(res => {
       console.log("Api sent this\n", res);
-      res['highscores']['phaserGame']['score'] ? (
-        sessionStorage.highscore = res['highscores']['phaserGame']['score'],
-        console.log("setting this.highscore to " + res['highscores']['phaserGame']['score'])
-      ) : (
-        console.log("Setting this.highscore to 0"),
-        sessionStorage.highscore = 0
+      try {
+        res['highscores'].phaserGame.score != undefined ? (
+          sessionStorage.highscore = res['highscores']['phaserGame']['score'],
+          console.log("setting this.highscore to " + res['highscores']['phaserGame']['score'])
+        ) : (
+          console.log("Setting this.highscore to 0"),
+          sessionStorage.highscore = 0
         )
-      this.user = res;
-    }) : null
+      }
+
+      catch (TypeError){}
+
+      finally{
+        this.user = res;
+      }
+    }) : sessionStorage.highscore = 0;
 
     this.gameOver = gameOver
     .asObservable()
     .subscribe(res => {
       res == true ? this.updateHighscore() : null;
-    })
+    });
   }
 
   ngOnDestroy(): void {
@@ -57,6 +65,7 @@ export class PhaserGameComponent implements OnInit, OnDestroy {
       console.log("Received response from server:")
       console.log(res['message']);
       sessionStorage.highscore = score;
+
       this.api.changeUser(res['user']);
     }) : null
   }
@@ -121,7 +130,14 @@ function create() {
       this.scene.restart();
       this.physics.resume();
       gameOver.next(false);
+      moveSpeed = 200
   });
+
+  // const kill = this.add.text(1200, 16, "Kill", {fontSize:'25px', fill: 'black'});
+  // kill.setInteractive()
+  // .on('pointerdown', () => {
+  //   player.health = 0;
+  // })
 
   platforms = this.physics.add.staticGroup();
   platforms.create(WIDTH / 2, HEIGHT - 35, 'platform').setScale(3.5).refreshBody();
@@ -140,6 +156,7 @@ function create() {
 
   healthText = this.add.text(600, 16, "Health: " + player.health, {fontSize:'25px', fill:'#000'});
 
+  sessionStorage.highscore == undefined ? sessionStorage.highscore = 0 : null;
   highscoreText = this.add.text(200, 16, "Highscore: " + sessionStorage.highscore, {fontSize: '25px', fill: '#000'});
 
   bombs = this.physics.add.group();

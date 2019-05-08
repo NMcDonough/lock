@@ -83,6 +83,7 @@ module.exports = {
             if(err)
                 return res.json({error: err})
             else if (user){
+                console.log("DEBUG: getUser hit. Returning", user)
                 user.password = null;
                 return res.json({user: user});
             }
@@ -103,28 +104,26 @@ module.exports = {
         return res.json({message: "i been had got pinged dude"})
     },
 
-    updateScore: (req, res) => {
-        console.log("Received this data",req.body);
-        User.findOne({_id: req.body.user}, (err,user) => {
+    updateScore: (req,res) => {
+        var newHighscores = {};
+        newHighscores[req.body.game] = {};
+        newHighscores[req.body.game].score = req.body.score;
+        User.update({_id: req.body.user}, {
+            highscores: newHighscores
+        }, (err, user) => {
             if(err) {
-                return res.json({error: err, message: "Error retrieving user"});
+                return res.json({error: err, message: "Error saving update"});
             } else if(user) {
-                console.log("Found user:", user.username);
-                user.highscores[req.body.game] = req.body.score;
-                console.log("User data:", user);
-                user.save((err, user) => {
-                    if(err) {
-                        return res.json({error: err, message: "Error saving user data"})
-                    } else if (user) {
-                        console.log("Saving successful. Mongoose returned:", user);
-                        user.password = null;
-                        return res.json({message: "Successful save", user: user});
-                    } else {
-                        console.log("None of the correct methods fired under /updateScore")
-                        return res.json({message: "Critical error"})
-                    }
-                });
+                return res.json({message: "Successfully updated"});
+            } else {
+                return res.json({message: "Critical failure"});
             }
         })
+    },
+
+    getAll: (req, res) => {
+        User.find({}, (err, users) => {
+            return res.json({users: users})
+        });
     }
 }

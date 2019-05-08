@@ -1,6 +1,14 @@
+* {
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
 #aboutContainer {
   display: flex;
   flex-direction: column;
   align-self: center;
   padding: 5% 20% 0 20%;
+}
+
+.thankyou {
+  font-size: 36px;
 }

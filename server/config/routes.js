@@ -28,6 +28,10 @@ module.exports = function(app) {
       return controller.updateScore(req, res);
     })
 
+    app.get('/api/users', (req, res) => {
+      return controller.getAll(req, res);
+    })
+
     // app.all("*", (req,res,next) => {
     //     res.sendFile(path.resolve('./public/src/index.html'))
     // })

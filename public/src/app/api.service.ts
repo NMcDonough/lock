@@ -31,12 +31,14 @@ export class ApiService {
   }
 
   getUser() {
-    return this.user;
+    console.log("GetUser method hit. CurrentUser:", this.currentUser);
+    return this.currentUser !== undefined ? this.user : this.user;
   }
 
   setUser() {
     this._http.get('http://localhost:8000/api/user/' + sessionStorage.user)
     .subscribe(res => {
+      console.log("User api is setting user to following:", res['user'])
       this.changeUser(res['user']);
       return this.user;
     });
