@@ -8,7 +8,7 @@ import './assets/PhaserGame/dude.png';
 import './assets/PhaserGame/bomb.png';
 import './assets/PhaserGame/platform.png';
 import './assets/PhaserGame/star.png';
-import './assets/PhaserGame/arrows.png';
+import './assets/PhaserGame/arrows.jpg';
 
 @Component({
   selector: 'app-phaser-game',
