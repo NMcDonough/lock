@@ -13,6 +13,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { TowerDefenseComponent } from './tower-defense/tower-defense.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { HttpClientModule } from '@angular/common/http';
     TitlebarComponent,
     PhaserGameComponent,
     ProfileComponent,
-    LoginComponent
+    LoginComponent,
+    TowerDefenseComponent
   ],
   imports: [
     BrowserModule,

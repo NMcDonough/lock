@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
+import { TowerDefenseComponent } from './tower-defense/tower-defense.component';
 
 const routes: Routes = [
     {
@@ -26,6 +27,10 @@ const routes: Routes = [
     {
       path: 'profile/:id',
       component: ProfileComponent
+    },
+    {
+      path: 'tower-defense',
+      component: TowerDefenseComponent
     }
 ];
 
