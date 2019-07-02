@@ -11,6 +11,6 @@ export class ScoreService {
   updateHighscore(data) {
     console.log("updateHighscore hit. Received: ", data)
     console.log("Pinging http://localhost:8000/api/updateScore")
-    return this._http.post("http://localhost:8000/api/updateScore", data)
+    return this._http.post("/api/updateScore", data)
   }
 }

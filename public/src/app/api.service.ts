@@ -23,11 +23,11 @@ export class ApiService {
   }
 
   registerUser(user) {
-    return this._http.post('http://localhost:8000/api/register', user);
+    return this._http.post('/api/register', user);
   }
 
   login(user) {
-    return this._http.post('http://localhost:8000/api/login', user);
+    return this._http.post('/api/login', user);
   }
 
   getUser() {
@@ -36,7 +36,7 @@ export class ApiService {
   }
 
   setUser() {
-    this._http.get('http://localhost:8000/api/user/' + sessionStorage.user)
+    this._http.get('/api/user/' + sessionStorage.user)
     .subscribe(res => {
       console.log("User api is setting user to following:", res['user'])
       this.changeUser(res['user']);
@@ -51,6 +51,6 @@ export class ApiService {
 
   deleteAccount() {
     console.log("Telling API to delete account")
-    return this._http.delete("http://localhost:8000/api/delete/user/" + sessionStorage.user);
+    return this._http.delete("/api/delete/user/" + sessionStorage.user);
   }
 }
